@@ -84,9 +84,9 @@ def gen_data_and_layout_case_shifted(normed=True):
         sel = all_cum_df[all_cum_df['state']==state]
         x = sel['days_since_50_cases']
         if normed == True:
-            y = sel['cumulative_deaths_normed']
+            y = sel['cumulative_cases_normed']
         else:
-            y = sel['cumulative_deaths']
+            y = sel['cumulative_cases']
         data.append({'x': x, 'y': y, 'name': state})
     layout = {
             'title': 'Cumulative number of cases',
