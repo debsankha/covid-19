@@ -105,9 +105,14 @@ data_case_shifted, layout_case_shifted = gen_data_and_layout_case_shifted()
 app.layout = html.Div(
     [
     html.H1(children='Some COVID-19 Charts'),
-    html.Div(children='''
-        Federal state-level data from germany (https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/data)
-    '''),
+    html.Div(children=[
+        "Based on: ", 
+        html.A('Federal state-level data', 
+                href='https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/data'
+                ),
+        " from germany, updated daily"
+        ]
+        ),
     dcc.Checklist(
             id="checklist",
             options=[
