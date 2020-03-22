@@ -24,7 +24,7 @@ def gen_data_and_layout_death(normed=True):
     data = []
     for state in federal_states_sorted:
         sel = all_cum_df[all_cum_df['state']==state]
-        x = sel['Meldedatum']
+        x = sel['date']
         if normed == True:
             y = sel['cumulative_deaths_normed']
         else:
@@ -63,7 +63,7 @@ def gen_data_and_layout_case(normed=True):
     data = []
     for state in federal_states_sorted:
         sel = all_cum_df[all_cum_df['state']==state]
-        x = sel['Meldedatum']
+        x = sel['date']
         if normed == True:
             y = sel['cumulative_cases_normed']
         else:
