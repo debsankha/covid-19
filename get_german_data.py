@@ -45,5 +45,34 @@ for bundesland in list(narrow_df['Bundesland'].unique())+['Germany']:
     cumsum_dfs.append(sel.reset_index())
 
 all_cum_df = pd.concat(cumsum_dfs)
+
+all_cum_df = all_cum_df.merge(population_states, left_on='Bundesland', right_on='Bundesland')
+all_cum_df.rename({'2018': 'population'}, axis='columns', inplace=True)
+
+all_cum_df['cumulative_deaths_normed'] = all_cum_df['cumulative_deaths']*100000/all_cum_df['population']
+all_cum_df['cumulative_cases_normed'] = all_cum_df['cumulative_cases']*100000/all_cum_df['population']
+
+german_state_abbrs = {
+'Baden-Württemberg': 'BW',
+'Bayern': 'BY',
+'Berlin': 'BE',
+'Brandenburg': 'BB',
+'Bremen': 'HB',
+'Hamburg': 'HH',
+'Hessen': 'HE',
+'Niedersachsen': 'NI',
+'Mecklenburg-Vorpommern': 'MV',
+'Nordrhein-Westfalen': 'NW',
+'Rheinland-Pfalz': 'RP',
+'Saarland': 'SL',
+'Sachsen': 'SN',
+'Sachsen-Anhalt': 'ST',
+'Schleswig-Holstein': 'SH',
+'Thüringen': 'TH',
+}
+
+all_cum_df['state'] = all_cum_df['Bundesland'].apply(lambda x:german_state_abbrs[x] if x!='Germany' else 'Germany')
+all_cum_df['date'] = all_cum_df['Meldedatum'].apply(lambda x:pd.Timestamp(x))
+
 all_cum_df.to_hdf('germany.h5', key='data')
 
