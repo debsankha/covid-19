@@ -110,7 +110,8 @@ app.layout = html.Div(
         html.A('Federal state-level data', 
                 href='https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/data'
                 ),
-        " from germany, updated daily"
+        " from germany, updated daily. ",
+        html.A('Source code on GitHub', href="https://github.com/debsankha/covid-19/"),
         ]
         ),
     dcc.Checklist(
