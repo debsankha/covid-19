@@ -111,7 +111,7 @@ app.layout = html.Div(
     dcc.Checklist(
             id="checklist",
             options=[
-                {"label": "Normalize", "value": "norm"},
+                {"label": "Normalize by 100,000 inhabitants", "value": "norm"},
             ],
             value=["norm"],
         ),
