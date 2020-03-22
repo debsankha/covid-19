@@ -191,4 +191,4 @@ def toggle_normalization(is_normed):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=9898)
+    app.run_server(host="0.0.0.0", port=8080)
