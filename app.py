@@ -1,7 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-
+from datetime import datetime
 import pandas as pd
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -13,6 +13,9 @@ all_cum_df = pd.read_hdf('germany.h5', key='data')
 
 federal_states_sorted = sorted(list(set(all_cum_df['state'])-{'Germany'})) + ['Germany']
 
+germany_time_start = datetime.strptime('2020-02-16', "%Y-%m-%d")
+today = datetime.today()
+
 def gen_data_and_layout_death():
     data = []
     for state in federal_states_sorted:
@@ -21,10 +24,10 @@ def gen_data_and_layout_death():
         y = sel['cumulative_deaths_normed']
         data.append({'x': x, 'y': y, 'name': state})
     layout = {
-#            'title': 'foo',
+            'title': 'Cumulative number of deaths',
             'showlegend': True,
             'yaxis': {'type': 'log', 'title': 'Deaths/100,000 inhabitants'},
-            'xaxis': {'title': 'Date'},
+            'xaxis': {'title': 'Date', 'range': [germany_time_start, today]},
             }
     return data, layout
 
@@ -36,10 +39,10 @@ def gen_data_and_layout_death_shifted():
         y = sel['cumulative_deaths_normed']
         data.append({'x': x, 'y': y, 'name': state})
     layout = {
- #           'title': 'foo',
+            'title': 'Cumulative number of deaths',
             'showlegend': True,
             'yaxis': {'type': 'log', 'title': 'Deaths/100,000 inhabitants'},
-            'xaxis': {'title': 'Date since first death', 'rangemode': 'nonnegative'},
+            'xaxis': {'title': 'number of days since first death', 'rangemode': 'nonnegative'},
             }
     return data, layout
 
@@ -51,10 +54,10 @@ def gen_data_and_layout_case():
         y = sel['cumulative_cases_normed']
         data.append({'x': x, 'y': y, 'name': state})
     layout = {
-    #        'title': 'foo',
+            'title': 'Cumulative number of cases',
             'showlegend': True,
             'yaxis': {'type': 'log', 'title': 'Cases/100,000 inhabitants'},
-            'xaxis': {'title': 'Date'},
+            'xaxis': {'title': 'Date', 'range': [germany_time_start, today]},
 
             }
     return data, layout
@@ -67,10 +70,10 @@ def gen_data_and_layout_case_shifted():
         y = sel['cumulative_deaths_normed']
         data.append({'x': x, 'y': y, 'name': state})
     layout = {
-     #       'title': 'foo',
+            'title': 'Cumulative number of cases',
             'showlegend': True,
             'yaxis': {'type': 'log', 'title': 'Cases/100,000 inhabitants'},
-            'xaxis': {'title': 'Date since 50 cases', 'rangemode': 'nonnegative'},
+            'xaxis': {'title': 'number of days since 50 cases', 'rangemode': 'nonnegative'},
             }
     return data, layout
 
@@ -86,7 +89,7 @@ app.layout = html.Div(
     [
     html.H1(children='Some COVID-19 Charts'),
     html.Div(children='''
-        Federal state-level data from germany
+        Federal state-level data from germany (https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/data)
     '''),
 
     html.Div(
