@@ -1,3 +1,9 @@
+"""
+A plotly dash powered dashboard showing some charts on the 
+spread of COVID-19 pandemic. 
+
+Uses data to be fetched by get_german_data.py.
+"""
 import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
@@ -5,18 +11,14 @@ import dash_html_components as html
 from datetime import datetime
 import pandas as pd
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 all_cum_df = pd.read_hdf('germany.h5', key='data')
-
-
 federal_states_sorted = sorted(list(set(all_cum_df['state'])-{'Germany'})) + ['Germany']
-
 germany_time_start = datetime.strptime('2020-02-16', "%Y-%m-%d")
 today = datetime.today()
-
 
 
 def gen_data_and_layout_death(normed=True):
@@ -101,6 +103,12 @@ data_death_shifted, layout_death_shifted = gen_data_and_layout_death_shifted()
 data_case, layout_case = gen_data_and_layout_case()
 data_case_shifted, layout_case_shifted = gen_data_and_layout_case_shifted()
 
+text = """
+This dashboard mere visualized data freely available on https://npgeo-corona-npgeo-de.hub.arcgis.com. 
+Bear in mind while interpreting the charts here:
+* Number of cases depends strongly on how many tests were carried out.
+* Cases or even deaths may sometimes be reported late.
+"""
 
 app.layout = html.Div(
     [
@@ -110,12 +118,13 @@ app.layout = html.Div(
         html.A('Federal state-level data', 
                 href='https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0/data'
                 ),
-        " from germany, updated daily. ",
-        html.A('Source code on GitHub', href="https://github.com/debsankha/covid-19/"),
+        " from germany, updated daily. Source code",
+        html.A('on GitHub.', href="https://github.com/debsankha/covid-19/"),
+        dcc.Markdown(text),
         ]
         ),
     dcc.Checklist(
-            id="checklist",
+            id="tonorm_check",
             options=[
                 {"label": "Normalize by 100,000 inhabitants", "value": "norm"},
             ],
@@ -170,7 +179,7 @@ app.layout = html.Div(
      Output("case", "figure"),
      Output("case_shifted_x", "figure"),
     ],
-    [Input("checklist", "value")],
+    [Input("tonorm_check", "value")],
 )
 def toggle_normalization(is_normed):
     if is_normed==['norm']:
@@ -189,7 +198,6 @@ def toggle_normalization(is_normed):
             {"data": data_case, "layout": layout_case},
             {"data": data_case_shifted, "layout": layout_case_shifted},
             ]
-
 
 if __name__ == '__main__':
     app.run_server(host="0.0.0.0", port=8080)
